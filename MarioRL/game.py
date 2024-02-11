@@ -9,16 +9,26 @@ from matplotlib import pyplot as plt
 env = gym_super_mario_bros.make('SuperMarioBros-v0')
 #Simplify the controls
 env = JoypadSpace(env, SIMPLE_MOVEMENT)
+
+'''
 #Grayscale
 env = GrayScaleObservation(env, keep_dim=True)
 #Wrap inside the Dummy
 env = DummyVecEnv([lambda: env])
 #Stack the frames
 env = VecFrameStack(env, 4, channels_order='last')
+'''
 
-state = env.reset()
+done = True
+# Main loop
+for step in range(5000):
+    #Start the game to begin with
+    if done:
+        #Start the game
+        env.reset()
+    state, reward, done, info = env.step(env.action_space.sample())
+    #Show game on the screen
+    env.render()
+env.close()
 
-state, reward, done, info = env.step(env.action_space.sample())
-
-plt.imshow(state[0])
 
